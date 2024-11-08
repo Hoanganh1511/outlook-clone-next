@@ -13,7 +13,7 @@ const MainLayout = (props: Props) => {
       <div className="pt-[48px] h-screen">
         <div className="relative h-full ">
           <VerticalNav />
-          <div className="pl-[48px] bg-[#F5F5F5] h-full">{props.children}</div>
+          <div className="pl-[48px] bg-[#F5F5F5] h-full ">{props.children}</div>
         </div>
       </div>
     </>
