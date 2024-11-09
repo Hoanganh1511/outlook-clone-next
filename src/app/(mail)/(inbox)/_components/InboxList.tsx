@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoCopyOutline } from "react-icons/io5";
 import { BsFilter } from "react-icons/bs";
 import { HiArrowsUpDown } from "react-icons/hi2";
@@ -10,8 +10,32 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { GoTrash } from "react-icons/go";
+import axios from "axios";
 const InboxList = () => {
   const [currentTab, setCurrentTab] = useState<"focused" | "other">("focused");
+  const [emailData, setEmailData] = useState([]);
+  useEffect(() => {
+    axios
+      .get(
+        `https://mailtrap.io/accounts/${process.env.NEXT_PUBLIC_MAIL_ACCOUNT_ID}/inboxes`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${
+              process.env.NEXT_PUBLIC_MAIL_API_KEY || ""
+            }`,
+            "Api-Token": process.env.NEXT_PUBLIC_MAIL_API_KEY || "",
+          },
+        }
+      )
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
+
   const data =
     currentTab === "focused"
       ? [
@@ -96,9 +120,9 @@ const InboxList = () => {
             <Tooltip>
               <TooltipTrigger>
                 {" "}
-                <button className="size-[32px] rounded-sm hover:bg-black/5 flex items-center justify-center">
+                <div className="size-[32px] rounded-sm hover:bg-black/5 flex items-center justify-center">
                   <IoCopyOutline />
-                </button>
+                </div>
               </TooltipTrigger>
               <TooltipContent>
                 <p>Copy</p>
@@ -107,9 +131,9 @@ const InboxList = () => {
             <Tooltip>
               <TooltipTrigger>
                 {" "}
-                <button className="size-[32px] rounded-sm hover:bg-black/5 flex items-center justify-center">
+                <div className="size-[32px] rounded-sm hover:bg-black/5 flex items-center justify-center">
                   <BsFilter />
-                </button>
+                </div>
               </TooltipTrigger>
               <TooltipContent>
                 <p>Filter</p>
@@ -118,9 +142,9 @@ const InboxList = () => {
             <Tooltip>
               <TooltipTrigger>
                 {" "}
-                <button className="size-[32px] rounded-sm hover:bg-black/5 flex items-center justify-center">
+                <div className="size-[32px] rounded-sm hover:bg-black/5 flex items-center justify-center">
                   <HiArrowsUpDown />
-                </button>
+                </div>
               </TooltipTrigger>
               <TooltipContent>
                 <p>Sorted: By Date </p>
@@ -130,37 +154,43 @@ const InboxList = () => {
         </div>
       </div>
       <ul className="flex flex-col">
-        {data.map((mail, idx) => {
-          return (
-            <li
-              key={idx}
-              className="pl-[12px] bg-white hover:bg-secondary border-b-[1px] border-gray-200 flex items-stretch cursor-default"
-            >
-              <div className="flex-1 flex pb-[12px]">
-                <div className="pt-[12px]">
-                  <div className="size-[34px] bg-[#a9d3f2] rounded-full flex items-center justify-center">
-                    <span className="text-[14px] text-[#004377] font-bold">
-                      HA
-                    </span>
+        {emailData &&
+          emailData.length > 0 &&
+          emailData.map((email, idx) => {
+            return (
+              <li
+                key={idx}
+                className="pl-[12px] bg-white hover:bg-secondary border-b-[1px] border-gray-200 flex items-stretch cursor-default"
+              >
+                <div className="flex-1 flex pb-[12px]">
+                  <div className="pt-[12px]">
+                    <div className="size-[34px] bg-[#a9d3f2] rounded-full flex items-center justify-center">
+                      <span className="text-[14px] text-[#004377] font-bold">
+                        HA
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex-1 ml-[12px] pt-[6px] pr-[] flex flex-col">
+                    <p className="text-[14px]">{/* {mail.username} */}</p>
+                    <div className="w-full flex justify-between">
+                      <p className="text-[14px]">
+                        {/* {mail.content} */}
+
+                        {JSON.stringify(email)}
+                      </p>
+                      <p className="text-[13px]">{/* {mail.time} */}</p>
+                    </div>
+                    <p className="text-[14px] text-black/65"> Content</p>
                   </div>
                 </div>
-                <div className="flex-1 ml-[12px] pt-[6px] pr-[] flex flex-col">
-                  <p className="text-[14px]">{mail.username}</p>
-                  <div className="w-full flex justify-between">
-                    <p className="text-[14px]">{mail.content}</p>
-                    <p className="text-[13px]">{mail.time}</p>
+                <button className="group/button ml-[12px] flex items-center justify-center hover:bg-[#fef2f3]">
+                  <div className="mt-auto mb-auto px-[10px] ">
+                    <GoTrash className="group-hover/button:text-red-600" />
                   </div>
-                  <p className="text-[14px] text-black/65"> Content</p>
-                </div>
-              </div>
-              <button className="group/button ml-[12px] flex items-center justify-center hover:bg-[#fef2f3]">
-                <div className="mt-auto mb-auto px-[10px] ">
-                  <GoTrash className="group-hover/button:text-red-600" />
-                </div>
-              </button>
-            </li>
-          );
-        })}
+                </button>
+              </li>
+            );
+          })}
       </ul>
     </div>
   );
