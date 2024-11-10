@@ -9,3 +9,18 @@ export type MailSidebarType =
   | "archive"
   | "notes"
   | "history";
+
+export interface IInbox {
+  from?: {
+    name: string;
+    address: string;
+  };
+  recipients: {
+    name: string;
+    address: string;
+  };
+  [];
+  subject: string;
+  html: string;
+  text?: string;
+}

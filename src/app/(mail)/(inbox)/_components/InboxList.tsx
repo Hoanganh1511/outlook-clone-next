@@ -13,28 +13,22 @@ import { GoTrash } from "react-icons/go";
 import axios from "axios";
 const InboxList = () => {
   const [currentTab, setCurrentTab] = useState<"focused" | "other">("focused");
+  const [isLoading, setLoading] = useState(true);
   const [emailData, setEmailData] = useState([]);
   useEffect(() => {
+    setLoading(true);
     axios
-      .get(
-        `https://mailtrap.io/accounts/${process.env.NEXT_PUBLIC_MAIL_ACCOUNT_ID}/inboxes`,
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${
-              process.env.NEXT_PUBLIC_MAIL_API_KEY || ""
-            }`,
-            "Api-Token": process.env.NEXT_PUBLIC_MAIL_API_KEY || "",
-          },
-        }
-      )
-      .then(function (response) {
-        console.log(response.data);
+      .get(`http://localhost:8000/email`)
+      .then(function (res) {
+        console.log(res.data);
+        setEmailData(res.data);
+        setLoading(false);
       })
       .catch(function (error) {
         console.log(error);
+        setLoading(false);
       });
-  }, []);
+  }, [currentTab]);
 
   const data =
     currentTab === "focused"
@@ -154,6 +148,7 @@ const InboxList = () => {
         </div>
       </div>
       <ul className="flex flex-col">
+        {isLoading && <p className="text-center py-4">Loading....</p>}
         {emailData &&
           emailData.length > 0 &&
           emailData.map((email, idx) => {
@@ -171,16 +166,15 @@ const InboxList = () => {
                     </div>
                   </div>
                   <div className="flex-1 ml-[12px] pt-[6px] pr-[] flex flex-col">
-                    <p className="text-[14px]">{/* {mail.username} */}</p>
+                    <p className="text-[14px]"> {email.from.name} </p>
                     <div className="w-full flex justify-between">
-                      <p className="text-[14px]">
-                        {/* {mail.content} */}
-
-                        {JSON.stringify(email)}
-                      </p>
+                      <p className="text-[14px]">{email.subject}</p>
                       <p className="text-[13px]">{/* {mail.time} */}</p>
                     </div>
-                    <p className="text-[14px] text-black/65"> Content</p>
+                    <p
+                      className="text-[14px] text-black/65 line-clamp-1"
+                      dangerouslySetInnerHTML={{ __html: email.html }}
+                    ></p>
                   </div>
                 </div>
                 <button className="group/button ml-[12px] flex items-center justify-center hover:bg-[#fef2f3]">
