@@ -11,10 +11,11 @@ import {
 } from "@/components/ui/tooltip";
 import { GoTrash } from "react-icons/go";
 import axios from "axios";
+import { IInbox } from "@/types";
 const InboxList = () => {
   const [currentTab, setCurrentTab] = useState<"focused" | "other">("focused");
   const [isLoading, setLoading] = useState(true);
-  const [emailData, setEmailData] = useState([]);
+  const [emailData, setEmailData] = useState<IInbox[]>([]);
   useEffect(() => {
     setLoading(true);
     axios
@@ -151,7 +152,7 @@ const InboxList = () => {
         {isLoading && <p className="text-center py-4">Loading....</p>}
         {emailData &&
           emailData.length > 0 &&
-          emailData.map((email, idx) => {
+          emailData.map((inbox, idx) => {
             return (
               <li
                 key={idx}
@@ -166,14 +167,14 @@ const InboxList = () => {
                     </div>
                   </div>
                   <div className="flex-1 ml-[12px] pt-[6px] pr-[] flex flex-col">
-                    <p className="text-[14px]"> {email.from.name} </p>
+                    <p className="text-[14px]"> {inbox.from.name} </p>
                     <div className="w-full flex justify-between">
-                      <p className="text-[14px]">{email.subject}</p>
+                      <p className="text-[14px]">{inbox.subject}</p>
                       <p className="text-[13px]">{/* {mail.time} */}</p>
                     </div>
                     <p
                       className="text-[14px] text-black/65 line-clamp-1"
-                      dangerouslySetInnerHTML={{ __html: email.html }}
+                      dangerouslySetInnerHTML={{ __html: inbox.html }}
                     ></p>
                   </div>
                 </div>

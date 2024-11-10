@@ -11,15 +11,14 @@ export type MailSidebarType =
   | "history";
 
 export interface IInbox {
-  from?: {
+  from: {
     name: string;
     address: string;
   };
   recipients: {
     name: string;
     address: string;
-  };
-  [];
+  }[];
   subject: string;
   html: string;
   text?: string;
