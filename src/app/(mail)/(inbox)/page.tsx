@@ -11,7 +11,7 @@ export default function HomePage() {
   const { isGenerateNewEmail } = useAppSelector(
     (state: RootState) => state.inbox
   );
-
+  const { setGenerateNewEmail } = inboxSlice.actions;
   return (
     <div className="flex flex-1">
       <InboxList />
