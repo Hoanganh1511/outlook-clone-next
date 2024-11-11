@@ -22,4 +22,6 @@ export interface IInbox {
   subject: string;
   html: string;
   text?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

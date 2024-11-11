@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import MainLayout from "@/components/layout/MainLayout";
 import { Providers } from "@/redux/provider";
-
+import { Toaster, toast } from "sonner";
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
 //   variable: "--font-geist-sans",
@@ -25,6 +25,7 @@ export default function RootLayout({
       <body className={` antialiased`}>
         <Providers>
           <MainLayout>{children}</MainLayout>
+          <Toaster richColors />
         </Providers>
       </body>
     </html>

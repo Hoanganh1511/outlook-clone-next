@@ -18,12 +18,29 @@ import { RiUserForbidLine } from "react-icons/ri";
 import { LiaBroomSolid } from "react-icons/lia";
 import { TbFolderCog } from "react-icons/tb";
 import { IoSettingsOutline } from "react-icons/io5";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { RootState } from "@/redux/configure-store";
+import inboxSlice from "@/redux/inboxSlice";
+import { useEffect } from "react";
 const HomeToolTab = () => {
+  const dispatch = useAppDispatch();
+  const { isGenerateNewEmail } = useAppSelector(
+    (state: RootState) => state.inbox
+  );
+  const { setGenerateNewEmail } = inboxSlice.actions;
+  useEffect(() => {
+    return () => {
+      dispatch(setGenerateNewEmail(false));
+    };
+  }, []);
   return (
     <div className="relative z-10 bg-white rounded-[4px] p-[4px] shadow-md">
       <div className="flex items-center">
         <div className="flex mr-[2px]">
-          <button className="bg-primary hover:bg-primary_hover flex justify-center items-center rounded-l-[4px] px-[12px] h-[32px] text-white">
+          <button
+            onClick={() => dispatch(setGenerateNewEmail(true))}
+            className="bg-primary hover:bg-primary_hover flex justify-center items-center rounded-l-[4px] px-[12px] h-[32px] text-white"
+          >
             <TiUserAddOutline className="size-[20px] mr-[8px]" />
             <span className="text-[14px] text-white">New email</span>
           </button>

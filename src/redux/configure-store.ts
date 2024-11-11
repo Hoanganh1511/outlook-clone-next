@@ -2,10 +2,12 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 // import createSagaMiddleware from "redux-saga";
 // import rootSaga from "./saga";
 import appSlice from "@/app/appSlice";
+import inboxSlice from "./inboxSlice";
 // const sagaMiddleware = createSagaMiddleware();
 export const store = configureStore({
   reducer: {
     app: appSlice.reducer,
+    inbox: inboxSlice.reducer,
   },
   devTools: process.env.NODE_ENV !== "production",
 });
